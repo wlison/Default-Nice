@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+              android:orientation="vertical"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/common_toolbar"/>
+
+    <com.othershe.calendarview.weiget.WeekView
+        android:layout_width="match_parent"
+        android:layout_height="35dp" />
+
+    <com.othershe.calendarview.weiget.CalendarView
+        android:id="@+id/nice_calendar"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:choose_type="single"
+        app:show_holiday="false"
+        app:show_lunar="false"
+        app:show_term="false"
+        app:switch_choose="true"
+        app:day_bg="@drawable/nice_day_selected"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+    <com.wlison.view.nicelibrary.widget.date.NiceWeekView
+        android:id="@+id/week"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        app:nice_weekTextColor="@color/black80"
+        app:nice_weekTextSize="14sp"/>
+
+    <com.wlison.view.nicelibrary.widget.date.NiceCalenderView
+        android:id="@+id/calender"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@color/white"
+        app:nice_calenderTextColor="@color/black80"
+        app:nice_calenderTextColorSelect="@color/white"
+        app:nice_selectDayBackgroundCurrent="@drawable/nice_day_selected_current"
+        app:nice_dayBackground="@drawable/nice_day_un_selected"
+        app:nice_selectDayBackground="@drawable/nice_day_selected"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"
+        android:text="464645"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp">
+
+    <Button
+        android:id="@+id/btn_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="上一个月"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="下一个月"/>
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

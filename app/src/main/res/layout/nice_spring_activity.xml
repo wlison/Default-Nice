@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/black5">
+
+    <include layout="@layout/common_toolbar"/>
+
+    <com.wlison.view.nicelibrary.widget.NiceSpinnerView
+        android:id="@+id/nice_spring"
+        android:layout_width="180dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        app:nice_textItemGravity="1"
+        app:nice_arrowColor="@color/colorPrimary"
+        app:nice_arrowHide="false"/>
+
+
+</LinearLayout>

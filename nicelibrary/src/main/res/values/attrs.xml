@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="NiceSpinnerView">
+        <attr name="nice_arrowColor" format="color"/> <!-- 箭头颜色 -->
+        <attr name="nice_arrowHide" format="boolean"/>  <!-- 是否显示箭头  true : 不显示    false : 显示   默认显示-->
+        <attr name="nice_arrowDrawableId" format="reference|color"/> <!-- 箭头 Drawable id -->
+        <attr name="nice_drawable_background" format="reference"/> <!-- 箭头 Drawable background -->
+        <attr name="nice_textColor" format="color"/>  <!-- 字体颜色 -->
+        <attr name="nice_textSize" format="float"/>   <!-- 字体大小 -->
+        <attr name="nice_itemTextColor" format="color"/>   <!-- item 字体颜色 -->
+        <attr name="nice_itemSelectorColor" format="color"/>   <!-- item 字体颜色 -->
+        <attr name="nice_textItemGravity" format="integer"/>   <!-- 字体 与 item字体 的位置   1:居中  2：左边   默认居中 -->
+        <attr name="nice_dividerColor" format="color"/>   <!-- listView 分割线颜色 -->
+        <attr name="nice_dividerHeight" format="integer"/>   <!-- listView 分割线高度 -->
+        <attr name="nice_window_background" format="reference"/>   <!-- window 背景设置 -->
+    </declare-styleable>
+
+    <declare-styleable name="NiceSwitchView">
+        <attr name="nice_switchColor" format="color"/> <!-- 设置颜色 -->
+        <attr name="nice_outerStrokeWidth" format="reference|dimension" />
+        <attr name="nice_shadowSpace" format="reference|dimension" /> <!-- 按钮阴影 -->
+        <attr name="nice_width" format="integer"/> <!-- 按钮长度 -->
+        <attr name="nice_height" format="integer"/> <!-- 按钮高度 -->
+    </declare-styleable>
+    
+    <declare-styleable name="NiceWeekView">
+        <attr name="nice_weekTextColor" format="color|reference"/>
+        <attr name="nice_weekTextSize" format="dimension|reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="NiceCalenderView">
+        <attr name="nice_calenderTextColor" format="color"/>
+        <attr name="nice_calenderTextColorSelect" format="color"/>
+        <attr name="nice_calenderTextSize" format="dimension|reference"/>
+        <attr name="nice_calenderTextSizeSelect" format="dimension|reference"/>
+        <attr name="nice_dayBackground" format="reference"/>
+        <attr name="nice_selectDayBackground" format="reference"/>
+        <attr name="nice_selectDayBackgroundCurrent" format="reference"/>
+        <attr name="nice_dateFormatPattern" format="string|reference"/>
+        <attr name="nice_isChangeDateStatus" format="boolean|reference"/>
+        <attr name="nice_isMultipleChoice" format="boolean|reference"/>
+    </declare-styleable>
+
+</resources>

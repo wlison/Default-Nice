@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="main_name_list">
+        <item>NiceSpring</item>
+        <item>NiceSwitch</item>
+        <item>NiceCalender</item>
+        <item>NicePopupWindow</item>
+        <item>CoordinatorLayout</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+        <item>敬请期待</item>
+        <item>后续添加</item>
+    </string-array>
+    
+</resources>
