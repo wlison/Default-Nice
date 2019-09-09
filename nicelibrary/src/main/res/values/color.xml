@@ -6,7 +6,13 @@
     <color name="colorAccent">#D81B60</color>
     <color name="primary_dark">#F38001</color>
     <color name="primary">#F69524</color>
+
     <color name="text_black">#5F5F5F</color>
+    <color name="blue_99CCFF">#99CCFF</color>
+
+    <color name="first_text_color">#333333</color>
+    <color name="second_text_color">#666666</color>
+    <color name="third_text_color">#999999</color>
 
     <color name="white5">#0cFFFFFF</color>
     <color name="white10">#22FFFFFF</color>

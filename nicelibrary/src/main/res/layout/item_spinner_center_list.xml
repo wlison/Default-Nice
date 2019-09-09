@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/common_back_color_sel">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tv_spinner"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:ellipsize="marquee"
-    android:gravity="center"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:singleLine="true"
-    android:textSize="14sp"
-    tools:textColor="@color/black70"
-    tools:text="Item"/>
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="marquee"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:singleLine="true"
+        android:textColor="@drawable/common_text_color_sel"
+        android:background="@drawable/common_back_color_sel"
+        android:textSize="14sp"
+        tools:text="Item"/>
+
+    <ImageView
+        android:id="@+id/imgTick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_5"
+        android:visibility="invisible"
+        android:src="@drawable/tick"/>
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_below="@+id/tv_spinner"
+        android:background="@color/black20"/>
+
+</RelativeLayout>

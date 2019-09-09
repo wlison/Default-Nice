@@ -10,10 +10,17 @@
         <attr name="nice_textSize" format="float"/>   <!-- 字体大小 -->
         <attr name="nice_itemTextColor" format="color"/>   <!-- item 字体颜色 -->
         <attr name="nice_itemSelectorColor" format="color"/>   <!-- item 字体颜色 -->
-        <attr name="nice_textItemGravity" format="integer"/>   <!-- 字体 与 item字体 的位置   1:居中  2：左边   默认居中 -->
-        <attr name="nice_dividerColor" format="color"/>   <!-- listView 分割线颜色 -->
-        <attr name="nice_dividerHeight" format="integer"/>   <!-- listView 分割线高度 -->
-        <attr name="nice_window_background" format="reference"/>   <!-- window 背景设置 -->
+        <attr name="nice_textItemGravity" format="enum">
+            <enum name="LEFT" value="1"/>  <!--字体 左边-->
+            <enum name="CENTER" value="2"/> <!--字体 居中-->
+        </attr>
+        <attr name="nice_selectType" format="enum">
+            <enum name="PICTURE" value="1"/> <!--右边对√-->
+            <enum name="COLOR" value="2"/>   <!--颜色选中 -->
+        </attr>
+        <attr name="nice_itemTextPadding" format="integer"/> <!--item的字体的padding-->
+        <attr name="nice_arrowMarginRight" format="integer"/>  <!--自定义箭头离右边距离-->
+        <!--<attr name="nice_window_background" format="reference"/>   &lt;!&ndash; window 背景设置 &ndash;&gt;-->
     </declare-styleable>
 
     <declare-styleable name="NiceSwitchView">

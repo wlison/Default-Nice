@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
+    <color name="first_text_color">#333333</color>
+    <color name="second_text_color">#666666</color>
+    <color name="third_text_color">#999999</color>
+
     <color name="white5">#0cFFFFFF</color>
     <color name="white10">#22FFFFFF</color>
     <color name="white20">#33FFFFFF</color>

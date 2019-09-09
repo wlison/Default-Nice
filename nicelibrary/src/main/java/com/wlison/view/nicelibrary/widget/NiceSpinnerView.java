@@ -10,25 +10,28 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.wlison.view.nicelibrary.R;
-import com.wlison.view.nicelibrary.adapter.BaseNiceSpinnerAdapter;
 import com.wlison.view.nicelibrary.adapter.NiceSpinnerAdapter;
-import com.wlison.view.nicelibrary.model.NiceSpinnerModel;
+import com.wlison.view.nicelibrary.model.NiceItemString;
 import com.wlison.view.nicelibrary.utils.NiceUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,6 +40,8 @@ import java.util.List;
  * Desc:
  */
 public class NiceSpinnerView extends FrameLayout {
+    public static final int TEXT_GRAVITY_LEFT = 1;
+    public static final int TEXT_GRAVITY_CENTER = 2;
     private static final int MAX_LEVEL = 10000;
     public static final int VERTICAL_OFFSET = 1;
 
@@ -44,23 +49,27 @@ public class NiceSpinnerView extends FrameLayout {
     private Context mContext;
     private TextView mText;
     private ImageView mImage;
-    private ListView listView;
     private PopupWindow window;
     private int mArrowColor;
     private int mTextColor;
     private float mTextSize;
+    private int arrowMarignRight;
     private boolean isArrowShow;
     private int displayHeight;
     private Drawable drawableArrow;
     private int drawableArrowId;
     private int mItemTextColor;
     private int mItemSelectorColor;
-    private NiceSpinnerModel mModel = new NiceSpinnerModel();
     private int mDrawableBackground;
-    private int mTextGravity;
-    private int mDividerColor;
-    private int mDividerHeight;
-    private int mWindowDrawable;
+    private int mTextGravity,mTextPadding;
+//    private int mWindowDrawable;
+    private String mItemContext;
+    private List<String> mDataList = new ArrayList<>();
+    private RecyclerView mNiceRecyclerView;
+    private NiceSpinnerAdapter mSpinnerAdapter;
+    private List<NiceItemString> mItemStringList;
+    private int mSelectType;
+    private int layoutId = R.layout.item_spinner_center_list;
 
     public NiceSpinnerView(@NonNull Context context) {
         super(context);
@@ -84,33 +93,31 @@ public class NiceSpinnerView extends FrameLayout {
     private void init(Context context, AttributeSet attrs) {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NiceSpinnerView);
         // 箭头颜色
-        mArrowColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_arrowColor, ContextCompat.getColor(context,R.color.primary_dark));
+        mArrowColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_arrowColor, ContextCompat.getColor(context,R.color.colorPrimary));
         // 字体颜色
-        mTextColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_textColor,ContextCompat.getColor(context,R.color.text_black));
+        mTextColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_textColor,ContextCompat.getColor(context,R.color.second_text_color));
         // 字体大小
         mTextSize = typedArray.getFloat(R.styleable.NiceSpinnerView_nice_textSize,16f);
         // 是否显示箭头
         isArrowShow = typedArray.getBoolean(R.styleable.NiceSpinnerView_nice_arrowHide,false);
         // 箭头 id
-        drawableArrowId = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_arrowDrawableId,R.drawable.nice_spinner_arrow);
+        drawableArrowId = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_arrowDrawableId,-1);
         // item 字体颜色
-        mItemTextColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_itemTextColor,ContextCompat.getColor(mContext,R.color.black50));
+        mItemTextColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_itemTextColor,ContextCompat.getColor(mContext,R.color.second_text_color));
         // item 点击效果
         mItemSelectorColor = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_itemSelectorColor, R.drawable.nice_selector);
         // drawable Background 背景
         mDrawableBackground = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_drawable_background,R.drawable.nice_shape_back_width);
         // 字体位置
-        mTextGravity = typedArray.getInteger(R.styleable.NiceSpinnerView_nice_textItemGravity,1);
-        // listView 分割线颜色
-        mDividerColor = typedArray.getColor(R.styleable.NiceSpinnerView_nice_dividerColor,ContextCompat.getColor(context,R.color.black20));
-        // listView 分割线高度
-        mDividerHeight = typedArray.getInteger(R.styleable.NiceSpinnerView_nice_dividerHeight,1);
+        mTextGravity = typedArray.getInt(R.styleable.NiceSpinnerView_nice_textItemGravity,2);
+        // 字体的 padding
+        mTextPadding = typedArray.getInt(R.styleable.NiceSpinnerView_nice_itemTextPadding,10);
         // window 背景设置
-        mWindowDrawable = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_window_background,R.drawable.nice_shape_back_pop);
-
-        mModel.setTextColor(mItemTextColor);
-        mModel.setItemSelector(mItemSelectorColor);
-        mModel.setItemGravity(mTextGravity);
+//        mWindowDrawable = typedArray.getResourceId(R.styleable.NiceSpinnerView_nice_window_background,R.drawable.nice_shape_back_pop);
+        // 选中Type
+        mSelectType = typedArray.getInt(R.styleable.NiceSpinnerView_nice_selectType,0);
+        // 自定义箭头离右边距离
+        arrowMarignRight = typedArray.getInt(R.styleable.NiceSpinnerView_nice_arrowMarginRight,8);
 
         initView(context);
         typedArray.recycle();
@@ -119,54 +126,81 @@ public class NiceSpinnerView extends FrameLayout {
     private void initView(Context context) {
         mText = new TextView(context);
         mImage = new ImageView(context);
-
+        // 框 LayoutParams
         FrameLayout.LayoutParams params = new LayoutParams(-1,230);
-
+        // 箭头 LayoutParams
         FrameLayout.LayoutParams params1 = new LayoutParams(-2,-2);
         params1.gravity = Gravity.RIGHT | Gravity.CENTER_VERTICAL;
-
+        // 字体 LayoutParams
         FrameLayout.LayoutParams params2 = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,-2);
-        if (mTextGravity == 1){
-            params2.gravity = Gravity.CENTER;
-            mText.setPadding(0,26,0,26);
-        }else if (mTextGravity == 2){
-            params2.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
-            mText.setPadding(38,26,0,26);
+
+        if (mTextGravity != 0) {
+            switch (mTextGravity){
+                case TEXT_GRAVITY_LEFT:
+                    params2.gravity = Gravity.LEFT;
+                    mText.setPadding(NiceUtils.dp2px(context,mTextPadding), 26, 0, 26);
+                    break;
+                case TEXT_GRAVITY_CENTER:
+                    params2.gravity = Gravity.CENTER;
+                    mText.setPadding(0, 26, 0, 26);
+                    break;
+            }
         }
+
+        // 自定义箭头离右边距离
+        if (drawableArrowId == -1)drawableArrowId = R.drawable.nice_spinner_arrow;
+        else params1.rightMargin = NiceUtils.dp2px(context,arrowMarignRight);
 
         // 设置背景
         setBackgroundResource(mDrawableBackground);
+        // 设置控件新属性
         setLayoutParams(params);
+        // 字体大小
         mText.setTextSize(mTextSize);
+        // 字体颜色
         mText.setTextColor(mTextColor);
         this.addView(mText,params2);
         this.addView(mImage,params1);
         setClickable(true);
 
-        listView = new ListView(context);
-        listView.setId(getId());
-        // 分割线颜色
-        listView.setDivider(new ColorDrawable(mDividerColor));
-        // 分割线高度
-        listView.setDividerHeight(mDividerHeight);
-//        listView.setBackground(ContextCompat.getDrawable(mContext,mWindowDrawable));
-        listView.setItemsCanFocus(true);
-        listView.setVerticalScrollBarEnabled(false); // 不活动的时候隐藏，活动的时候显示
-        listView.setHorizontalScrollBarEnabled(false);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mNiceRecyclerView = new RecyclerView(context);
+        mNiceRecyclerView.setId(getId());
+        mNiceRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        // item Layout
+        if (mTextGravity == 1) {
+            layoutId = R.layout.item_spinner_left_list;
+        } else if (mTextGravity == 2) {
+            layoutId = R.layout.item_spinner_center_list;
+        }
+        // recycler Adapter
+        mSpinnerAdapter = new NiceSpinnerAdapter(layoutId,new ArrayList<NiceItemString>());
+        // 间隔线
+//        mNiceRecyclerView.addItemDecoration(mSpinnerAdapter.setItemDecoration((int) context.getResources().getDimension(R.dimen.dp_1)));
+        mNiceRecyclerView.setAdapter(mSpinnerAdapter);
+        mNiceRecyclerView.addOnItemTouchListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mOnNiceSpinnerClickListener.onNiceClick(parent,view,position,id);
-                String str = parent.getItemAtPosition(position).toString();
-                mText.setText(str);
+            public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mOnNiceSpinnerClickListener.onNiceClick(adapter, view, position);
+                NiceItemString model = (NiceItemString) adapter.getItem(position);
+                mItemContext = model.getTitle();
+                List<NiceItemString> list = adapter.getData();
+                for (NiceItemString item : list){
+                    item.setImgPic(false);
+                    item.setBackground(false);
+                }
+                if (model.getSelectType() == 1) model.setImgPic(true);
+                else if (model.getSelectType() == 2) model.setBackground(true);
+                adapter.notifyDataSetChanged();
+                mText.setText(mItemContext);
                 dismissWindow();
             }
         });
 
         window = new PopupWindow(context);
-        window.setContentView(listView);
+        window.setContentView(mNiceRecyclerView);
         window.setOutsideTouchable(true);
         window.setFocusable(true);
+
         window.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -186,12 +220,9 @@ public class NiceSpinnerView extends FrameLayout {
         super.onVisibilityChanged(changedView, visibility);
         drawableArrow = initArrowDrawable(mArrowColor);
         if (!isArrowShow && drawableArrow != null) {
-//            setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
             mImage.setImageDrawable(drawableArrow);
         } else {
             Drawable temp = new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent));
-//            temp.setBounds(0,0,arrowDrawable.getMinimumWidth(),arrowDrawable.getMinimumHeight());
-//            setCompoundDrawables(null, null, temp, null);
             mImage.setImageDrawable(temp);
         }
     }
@@ -207,6 +238,7 @@ public class NiceSpinnerView extends FrameLayout {
         return drawable;
     }
 
+    // 箭头动画
     public void animateArrow(boolean isAnimate) {
         int start = isAnimate ? 0 : MAX_LEVEL;
         int end = isAnimate ? MAX_LEVEL : 0;
@@ -236,20 +268,21 @@ public class NiceSpinnerView extends FrameLayout {
         }
         measurePopUpDimension();
         // 设置 window 离显示框的高度
-        window.showAsDropDown(this, 0, 2);
+        window.showAsDropDown(this, 0, 1);
     }
 
     private void measurePopUpDimension() {
         int widthSpec = MeasureSpec.makeMeasureSpec(getMeasuredWidth(), MeasureSpec.EXACTLY);
         int heightSpec = MeasureSpec.makeMeasureSpec(displayHeight - getParentVerticalOffset() - getMeasuredHeight(), MeasureSpec.AT_MOST);
-        listView.measure(widthSpec, heightSpec);
-        window.setWidth(listView.getMeasuredWidth());
+        mNiceRecyclerView.measure(widthSpec, heightSpec);
+        window.setWidth(mNiceRecyclerView.getMeasuredWidth());
 
         // 设置popup高度  可以自定义
         int height = NiceUtils.getScreenHeight(mContext) / 2;
-        int listViewHeight = listView.getMeasuredHeight() - listPaddingBottom;
+        int listViewHeight = mNiceRecyclerView.getMeasuredHeight() - listPaddingBottom;
         window.setHeight(listViewHeight > height ? height : listViewHeight);
-        window.setBackgroundDrawable(ContextCompat.getDrawable(mContext,mWindowDrawable));
+        window.setBackgroundDrawable(null);
+//        window.setBackgroundDrawable(ContextCompat.getDrawable(mContext,mWindowDrawable));
     }
 
     // 获得目标控件位置 ，判断是要放在这个目标的上面还是下面
@@ -263,22 +296,80 @@ public class NiceSpinnerView extends FrameLayout {
         return vertical = locationOnScreen[VERTICAL_OFFSET];
     }
 
-    // 设置 NiceSpring 数据
-    public <T> void setNiceSpinnerData(List<T> list) {
-        BaseNiceSpinnerAdapter adapter = new NiceSpinnerAdapter<>(getContext(), list, mModel);
-        setAdapterInternal(adapter);
-        mText.setText((String)adapter.getItem(0));
+    /**
+     * @param itemLayoutId 自定义itemLayoutId
+     */
+    public void setItemLayoutId(int itemLayoutId){
+        mSpinnerAdapter = new NiceSpinnerAdapter(itemLayoutId,new ArrayList<NiceItemString>());
+        mNiceRecyclerView.setAdapter(mSpinnerAdapter);
+        mSpinnerAdapter.setNewData(mItemStringList);
     }
 
-    private void setAdapterInternal(BaseNiceSpinnerAdapter adapter) {
-        // If the adapter needs to be settled again, ensure to reset the selected index as well
-        listView.setAdapter(adapter);
+    public String getTextContext(){
+        return mItemContext;
+    }
+
+    /**
+     * @param context 设置显示的数据
+     */
+    public void setTextContext(String context){
+        int index = mDataList.indexOf(context);
+        if (index != -1){
+            mItemContext = context;
+            mText.setText(context);
+            setItemSelector(index);
+        }
+        invalidate();
+    }
+
+    /**
+     * @param position 选中第几条数据
+     */
+    public void setItemSelector(int position){
+        for (NiceItemString item : mItemStringList){
+            if (mSelectType == 1) item.setImgPic(false);
+            else if (mSelectType == 2) item.setBackground(false);
+        }
+        if (mSelectType == 1) mItemStringList.get(position).setImgPic(true);
+        else if (mSelectType == 2) mItemStringList.get(position).setBackground(true);
+        invalidate();
+    }
+
+    /**
+     * @param teamData 数组
+     */
+    public void setNiceSpinnerTeamData(String[] teamData){
+        mDataList = Arrays.asList(teamData);
+        setNiceSpinnerData(mDataList);
+    }
+
+    /**
+     * @param list list 数据
+     */
+    public void setNiceSpinnerData(List<String> list) {
+        mDataList = list;
+        mItemStringList = new ArrayList<>();
+        for (int i=0;i<list.size();i++){
+            NiceItemString nice = new NiceItemString();
+            String item = list.get(i);
+            if (i == 0) {
+                if (mSelectType == 1) nice.setImgPic(true);
+                else if (mSelectType == 2) nice.setBackground(true);
+            }
+            nice.setTitle(item);
+            nice.setSelectType(mSelectType);
+            mItemStringList.add(nice);
+        }
+
+        mItemContext = list.get(0);
+        mText.setText(mItemContext);
+        mSpinnerAdapter.setNewData(mItemStringList);
     }
 
     // 回调接口
     private OnNiceSpinnerClickListener mOnNiceSpinnerClickListener;
     public interface OnNiceSpinnerClickListener{
-        void onNiceClick(AdapterView<?> parent, View view, int position, long id);
+        void onNiceClick(BaseQuickAdapter adapter, View view, int position);
     }
     public void setOnNiceSpinnerClickListener(OnNiceSpinnerClickListener listener){
         this.mOnNiceSpinnerClickListener = listener;

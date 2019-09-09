@@ -15,9 +15,50 @@
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        app:nice_textItemGravity="1"
+        app:nice_textItemGravity="LEFT"
+        app:nice_selectType="PICTURE"
         app:nice_arrowColor="@color/colorPrimary"
         app:nice_arrowHide="false"/>
+
+    <com.wlison.view.nicelibrary.widget.NiceSpinnerView
+        android:id="@+id/niceSpring1"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        app:nice_textItemGravity="CENTER"
+        app:nice_selectType="COLOR"
+        app:nice_arrowColor="@color/colorAccent"
+        app:nice_arrowHide="false"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <com.wlison.view.nicelibrary.widget.NiceSpinnerView
+            android:id="@+id/niceSpring2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            app:nice_textSize="20.0"
+            app:nice_textItemGravity="LEFT"
+            app:nice_arrowColor="@color/colorPrimary"
+            app:nice_arrowDrawableId="@drawable/nice_spinner_arrow_custom"
+            app:nice_arrowHide="false"/>
+
+        <com.wlison.view.nicelibrary.widget.NiceSpinnerView
+            android:id="@+id/niceSpring3"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal"
+            app:nice_arrowColor="@color/primary"
+            app:nice_arrowHide="false"/>
+
+    </LinearLayout>
 
 
 </LinearLayout>
